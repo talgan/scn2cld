@@ -65,7 +65,7 @@ ask_disable_reset_button ()
 {
  read -n 1 -p "Do you want disable reset button ? (y/n) "
 	if [ "$REPLY"   = "y" ]; then
-	DISABLE_RESET_BUTTON="Yes"
+	DISABLE_RESET_BUTTON="yes"
 	fi   
 }			
 ask_disable_reset_button	
@@ -75,7 +75,7 @@ ask_install_reconnect_script ()
 {
  read -n 1 -p "Do you want install reconnect button ? (y/n) "
 	if [ "$REPLY"   = "y" ]; then
-	INSTALL_RECONNECT_SCRIPT="Yes"
+	INSTALL_RECONNECT_SCRIPT="yes"
 	fi   
 }				
 ask_install_reconnect_script
@@ -114,7 +114,7 @@ disable_reset_button()
 # remove reset command script
 rm -rf /usr/bin/reset
 }
-if [ "${DISABLE_RESET_BUTTON}" = "Yes" ]; then
+if [ "${DISABLE_RESET_BUTTON}" = "yes" ]; then
 	disable_reset_button
 fi
 
@@ -175,5 +175,4 @@ EOF
 if [ "${INSTALL_RECONNECT_SCRIPT}" = "yes" ]; then
 	install_reconnect_script
 fi
-
-
+ 
