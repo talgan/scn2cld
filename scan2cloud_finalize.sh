@@ -1,7 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 ###############################################################################
-# Domain toevoegen
-
   
 
 #################################
@@ -63,7 +61,7 @@ fi
 
 ask_disable_reset_button ()
 {
- read -n 1 -p "Do you want disable reset button ? (y/n) "
+ read -n 1 -p "\nDo you want disable reset button ? (y/n) "
 	if [ "$REPLY"   = "y" ]; then
 	DISABLE_RESET_BUTTON="yes"
 	fi   
@@ -73,7 +71,7 @@ ask_disable_reset_button
 
 ask_install_reconnect_script ()
 {
- read -n 1 -p "Do you want install reconnect button ? (y/n) "
+ read -n 1 -p "\nDo you want install reconnect button ? (y/n) "
 	if [ "$REPLY"   = "y" ]; then
 	INSTALL_RECONNECT_SCRIPT="yes"
 	fi   
