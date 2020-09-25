@@ -138,8 +138,11 @@ touch /usr/bin/vpn_reconnect
 #make file executable
 chmod +x /usr/bin/vpn_reconnect
 
-# write content in script file
-cat > /usr/bin/vpn_reconnect <<EOF
+# write content in script file  
+#EOF With quotes LIKE 'EOF' means override variables  $a  will be in script as $a
+#Without quotes LIKE EOF means write value of the variable  $a  will be in script as NOT $a but value
+
+cat > /usr/bin/vpn_reconnect <<'EOF'
 #!/bin/sh
 
 #wait for the openvpn to connect for the first time
