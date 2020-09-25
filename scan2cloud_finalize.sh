@@ -7,6 +7,7 @@
 #################################
 DISABLE_RESET_BUTTON="no"
 INSTALL_RECONNECT_SCRIPT="no"
+RUN_RECONNECT_SCRIPT_AT_BOOT="no"
 
 # old samples
 # TEMP_USER_ANSWER="no"
@@ -61,23 +62,35 @@ fi
 
 ask_disable_reset_button ()
 {
- read -n 1 -p "\nDo you want disable reset button ? (y/n) "
+  read -n 1 -p "Do you want disable reset button ? (y/n) "
 	if [ "$REPLY"   = "y" ]; then
 	DISABLE_RESET_BUTTON="yes"
 	fi   
+  echo " "
 }			
 ask_disable_reset_button	
 
 
 ask_install_reconnect_script ()
 {
- read -n 1 -p "\nDo you want install reconnect button ? (y/n) "
+  read -n 1 -p "Do you want install openvpn reconnect script ? (y/n) "
 	if [ "$REPLY"   = "y" ]; then
 	INSTALL_RECONNECT_SCRIPT="yes"
-	fi   
+	fi
+echo "."	
 }				
 ask_install_reconnect_script
 
+
+ask_run_reconnect_script_at_boot ()
+{
+ read -n 1 -p "Do you want install reconnect script at boot ? in (/etc/rc.local) file (y/n) "
+	if [ "$REPLY"   = "y" ]; then
+	RUN_RECONNECT_SCRIPT_AT_BOOT="yes"
+	fi
+echo "."	
+}				
+ask_run_reconnect_script_at_boot
 
 test_script ()
 {
@@ -97,7 +110,7 @@ test_script ()
 			echo "Your INVALID entered subdomainname is : ${SUBDOMAIN} "
 			echo "Please run this script again"
 			echo ""	
-			DISABLE_RESET_BUTTON="no"
+			DISABLE_RESET_BUTTONN="no"
 		fi
 }
 
@@ -107,16 +120,15 @@ test_script ()
 ####  INSTALL SCRIPTS ###########
 #################################
 
+# disable reset button script
 disable_reset_button()
 {
 # remove reset command script
 rm -rf /usr/bin/reset
 }
-if [ "${DISABLE_RESET_BUTTON}" = "yes" ]; then
-	disable_reset_button
-fi
 
 
+# openvpn reconnect script
 install_reconnect_script()
 {
 
@@ -137,7 +149,7 @@ while [ true ]; do
 
 #check if openvpn is enabled, if not, go to next loop
 vpn_enabled=$(uci get glconfig.openvpn.enable)
-if [ “$vpn_enabled” != “1” ]; then
+if [ "$vpn_enabled" != "1" ]; then
 echo "VPN not enabled, check 20 seconds later"
 sleep 20
 continue
@@ -146,8 +158,8 @@ fi
 vpn_pid=$(pidof openvpn)
 tun0_ifname=$(ifconfig tun0)
 
-if [ -z “$tun0_ifname” ] && [ -z “$vpn_pid” ]; then
-echo “VPN enabled but not running, restarting it”
+if [ -z "$tun0_ifname" ] && [ -z "$vpn_pid" ]; then
+echo "VPN enabled but not running, restarting it"
 /etc/init.d/startvpn restart
 else
 echo "VPN is connected and connecting, check 20 seconds later"
@@ -159,18 +171,33 @@ done
 
 EOF
 
+}
 
-
+# add run reconnect script on boot in /etc/rc.local
+run_reconnect_script_at_boot()
+{
 # add command to start script on boot (at the end of /etc/rc.local, before exit)
 cat >> /etc/rc.local <<EOF
 # reconnect script
-/usr/bin/vpn_reconnect &
+/usr/bin/vpn_reconn	ect &
 
 EOF
-
-
 }
+
+
+#################################
+##  run the requested scripts ###
+#################################
+
+if [ "${DISABLE_RESET_BUTTON}" = "yes" ]; then
+	disable_reset_button
+fi
+
 if [ "${INSTALL_RECONNECT_SCRIPT}" = "yes" ]; then
 	install_reconnect_script
+fi 
+
+if [ "${RUN_RECONNECT_SCRIPT_AT_BOOT}" = "yes" ]; then
+	run_reconnect_script_at_boot
 fi
  
