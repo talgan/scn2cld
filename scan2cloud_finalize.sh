@@ -182,7 +182,7 @@ run_reconnect_script_at_boot()
 # add command to start script on boot (at the end of /etc/rc.local, before exit)
 cat >> /etc/rc.local <<EOF
 # reconnect script
-/usr/bin/vpn_reconn	ect &
+/usr/bin/vpn_reconnect &
 
 EOF
 }
